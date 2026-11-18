@@ -6,6 +6,7 @@ Los ADR los escribe el orquestador al cerrar cada etapa (`/cerrar-etapa`) o con 
 
 | # | Título | Estado |
 |---|---|---|
-| [0001](0001-kit-de-arranque.md) | Kit de arranque: el playbook | Aceptada |
+| [0001](0001-kit-de-arranque.md) | Kit de arranque: el playbook | Aceptada (acuerdos 1 y 5 reemplazados por 0002) |
+| [0002](0002-un-repo-por-idea.md) | Un repo por idea aprobada, sin incubadora | Aceptada |
 
 Los ADR del proyecto arrancan en 0002 y no los pisa `copier update`.

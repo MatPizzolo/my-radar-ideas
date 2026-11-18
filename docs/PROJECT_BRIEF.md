@@ -6,7 +6,7 @@
 
 ## Objetivo
 
-Radar diario que le deja al owner un PR con 5 a 10 señales de negocio y 1 idea B2B testeada a fondo; con su merge arranca la investigación de esa idea en el repo incubadora.
+Radar diario que le deja al owner un PR con 5 a 10 señales de negocio y 1 idea B2B testeada a fondo; con su merge arranca un repo propio para esa idea, generado con my-playbook (ADR 0002).
 
 [TODO: en dos o tres oraciones, qué tiene que poder hacer quien lo usa y qué efecto buscamos.]
 
@@ -45,11 +45,11 @@ Radar diario que le deja al owner un PR con 5 a 10 señales de negocio y 1 idea 
 
 **Acuerdos sobre reglas del playbook** (detalle en `docs/adr/0001-kit-de-arranque.md`):
 
-- Decisión 0005 §4 (/schedule solo deja PRs de etapas 1 y 6) y GATE 1: arranque corre copier y la etapa 1, y deja un PR en incubadora. Las etapas 2 y 3 las corre el owner en local, con sus gates.
+- Decisión 0005 §4 (/schedule solo deja PRs de etapas 1 y 6) y GATE 1: arranque corre copier y la etapa 1 en el repo propio de la idea y deja un PR ahí (ADR 0002). Las etapas 2 y 3 las corre el owner en local, con sus gates.
 - Nada se mergea, publica ni envía solo (decisiones 0002 y 0005): El radar puede cerrar esos PRs con el comentario 'sin decisión'; nunca mergea ni borra ramas. Cerrar se deshace reabriendo.
 - Decisión 0006 (conectores por proyecto, por OAuth, sin escritura en la nube): Sin Gmail en la v1. firecrawl y perplexity por OAuth, solo lectura; perplexity cobra por llamada y entra en el tope de costo; los tests usan fixtures. En claude.ai se sacan de las rutinas los conectores con escritura.
 - my-playbook guarda plantillas y plugins: docs/ideas/, el PR diario y el trigger 'PR merged' viven en my-radar-ideas.
-- La nube no carga plugins (skills en .claude/skills/ del repo donde corren): Este repo va con skills_en_la_nube vacío. El prompt de arranque genera cada proyecto en incubadora/proyectos/<slug>/ con corre_en_la_nube=true y skills_en_la_nube=[investigar], así la skill viaja con cada proyecto y sigue la versión del plugin.
+- La nube no carga plugins (skills en .claude/skills/ del repo donde corren): Este repo va con skills_en_la_nube vacío. Si el arranque corre en la nube, genera el repo de cada idea con corre_en_la_nube=true y skills_en_la_nube=[investigar]; si corre en local, la skill la carga el plugin (ADR 0002).
 
 
 ## Arquitectura propuesta (ajustable en M0)
