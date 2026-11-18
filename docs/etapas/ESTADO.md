@@ -7,24 +7,24 @@
 
 | Etapa | Estado | Notas |
 |---|---|---|
-| 1 Investigación | insumo existente, validar | `docs/investigacion/radar-ideas.md`: validar antes de seguir (lista abajo). No se rehace. |
+| 1 Investigación | tesis aprobada (2026-11-18), con ajustes | `docs/investigacion/radar-ideas.md` validado en `docs/investigacion/validacion.md`. Pendiente: pruebas P1 y P2 en la nube antes de M0. |
 | 5 Construcción (M0–M5) | pendiente | |
 
 **Insumo de la etapa 1** (`docs/investigacion/radar-ideas.md`). Pendiente de validar:
 
-- [ ] Trigger de GitHub 'PR merged' en rutinas y filtro por etiqueta (radar-ideas.md:49, :262) [3ros]
-- [ ] Topes diarios de corridas de rutinas en tu plan (radar-ideas.md:279) [3ros, se contradicen]
-- [ ] Endpoint por rutina con token, para la v2 con Telegram (radar-ideas.md:50) [3ros]
-- [ ] Eventos de issues como trigger (radar-ideas.md:81) [sin verificar]
-- [ ] Páginas de portfolio de cada aceleradora (radar-ideas.md:100) [sin verificar]
-- [ ] Fuentes de LatAm, India e Israel (radar-ideas.md:104) [sin verificar]
-- [ ] API de HN y Algolia (radar-ideas.md:108) [sin verificar]
-- [ ] Términos de Bumeran, ZonaJobs y Computrabajo (radar-ideas.md:125) [sin verificar]
-- [ ] Que firecrawl y perplexity por OAuth anden dentro de una rutina (no está en el brief)
-- [ ] Que la rutina arranque pueda clonar gh:MatPizzolo/my-playbook (privado) para el copier copy
-- [ ] Que uvx exista en el entorno de la nube
-- [ ] Que la nube cargue .claude/skills/ de una subcarpeta (incubadora/proyectos/<slug>/)
-- [ ] Si /schedule acepta la hora de Buenos Aires (07:41) o hay que pasarla a UTC
+- [x] Trigger de GitHub 'PR merged' en rutinas y filtro por etiqueta (radar-ideas.md:49, :262) [3ros]
+- [x] Topes diarios de corridas de rutinas en tu plan (radar-ideas.md:279) [3ros, se contradicen] → refutado, ver validacion.md #2
+- [x] Endpoint por rutina con token, para la v2 con Telegram (radar-ideas.md:50) [3ros]
+- [x] Eventos de issues como trigger (radar-ideas.md:81) [sin verificar]
+- [x] Páginas de portfolio de cada aceleradora (radar-ideas.md:100) [sin verificar] → YC, Techstars y Station F prohíben robots (validacion.md #5)
+- [x] Fuentes de LatAm, India e Israel (radar-ideas.md:104) [sin verificar] → Geektime se cae (validacion.md #6)
+- [x] API de HN y Algolia (radar-ideas.md:108) [sin verificar]
+- [x] Términos de Bumeran, ZonaJobs y Computrabajo (radar-ideas.md:125) [sin verificar] → prohíben bots: solo fragmentos de búsqueda (validacion.md #8)
+- [ ] Que firecrawl y perplexity por OAuth anden dentro de una rutina (no está en el brief) → pendiente de prueba P1/P2 (validacion.md)
+- [ ] Que la rutina arranque pueda clonar gh:MatPizzolo/my-playbook (privado) para el copier copy → pendiente de prueba P1/P2 (validacion.md)
+- [ ] Que uvx exista en el entorno de la nube → pendiente de prueba P1/P2 (validacion.md)
+- [ ] Que la nube cargue .claude/skills/ de una subcarpeta (incubadora/proyectos/<slug>/) → pendiente de prueba P1/P2 (validacion.md)
+- [x] Si /schedule acepta la hora de Buenos Aires (07:41) o hay que pasarla a UTC
 
 ## Decisiones
 
@@ -41,6 +41,8 @@
 **Diferidas**
 
 - [ ] Dónde se hostea el pipeline (M5).
+- [ ] Dónde corre el arranque: en la nube creando el repo de la idea, o en local con /my-flow:nuevo-proyecto. Se decide con P1 (ADR 0002).
+- [ ] GitHub Pro para proteger repos privados; mientras tanto, my-radar-ideas y los repos de ideas van públicos.
 
 ## Backlog
 
