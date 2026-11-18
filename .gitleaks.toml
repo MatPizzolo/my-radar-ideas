@@ -1,0 +1,16 @@
+# gitleaks config for the local CI secrets scan (scripts/ci.sh).
+# Keeps the default rules and only allowlists known false positives.
+title = "my-playbook project gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Internal compose URLs like http://api:8000/... trip generic-api-key"
+regexTarget = "line"
+regexes = ['''["']http://api:8000/[A-Za-z0-9/_.-]*["']''']
+
+[[allowlists]]
+description = "Env placeholders in .mcp.json and compose (${VAR}) are not secrets"
+regexTarget = "line"
+regexes = ['''\$\{[A-Z][A-Z0-9_]*\}''']

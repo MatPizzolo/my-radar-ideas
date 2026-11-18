@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "my-playbook": {
+      "source": {
+        "source": "github",
+        "repo": "MatPizzolo/my-playbook"
+      }
+    },
+    "ecc": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/ECC"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "my-flow@my-playbook": true,
+    "ecc@ecc": true,
+    "superpowers@claude-plugins-official": false
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": ["firecrawl", "perplexity"],
+  "permissions": {
+    "allow": [
+      "Bash(make:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run ruff:*)",
+      "Bash(uv run mypy:*)",
+      "mcp__firecrawl__firecrawl_search",
+      "mcp__firecrawl__firecrawl_scrape",
+      "mcp__firecrawl__firecrawl_map",
+      "mcp__perplexity__perplexity_search",
+      "Bash(ls:*)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git rebase:*)",
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(uv add:*)",
+      "mcp__firecrawl__firecrawl_crawl",
+      "mcp__firecrawl__firecrawl_agent",
+      "mcp__perplexity__perplexity_ask",
+      "mcp__perplexity__perplexity_research",
+      "mcp__perplexity__perplexity_reason",
+      "Bash(pip install:*)"
+    ],
+    "deny": [
+      "Bash(docker compose:*)",
+      "Bash(docker-compose:*)",
+      "Bash(git push --force:*)",
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.*.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Read(./.env.test)",
+      "mcp__notion__notion-create-pages",
+      "mcp__notion__notion-update-page",
+      "mcp__notion__notion-move-pages",
+      "mcp__notion__notion-duplicate-page",
+      "mcp__composio",
+      "mcp__claude_ai_Gmail",
+      "mcp__claude_ai_Slack",
+      "mcp__claude_ai_Notion__notion-create-pages",
+      "mcp__claude_ai_Notion__notion-update-page",
+      "mcp__claude_ai_Notion__notion-move-pages",
+      "mcp__claude_ai_Notion__notion-delete-pages",
+      "mcp__claude_ai_Notion__notion-create-comment",
+      "mcp__claude_ai_Google_Drive__create_file",
+      "mcp__claude_ai_Google_Drive__update_file",
+      "mcp__claude_ai_Google_Drive__share_file",
+      "mcp__claude_ai_Google_Drive__trash_file",
+      "mcp__claude_ai_Google_Docs__update_doc",
+      "mcp__claude_ai_Google_Sheets__update_values",
+      "mcp__claude_ai_Google_Sheets__append_values"
+    ]
+  }
+}

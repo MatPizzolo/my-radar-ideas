@@ -1,0 +1,42 @@
+# Remote CI for my-radar-ideas: runs the same single gate as a laptop
+# (`make ci`), so the contract does not change with the place it runs.
+# No paid API is called: tests use fakes and recorded fixtures.
+name: ci
+
+on:
+  push:
+    branches:
+      - "m*/**"
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  make-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh
+
+      - name: make ci
+        env:
+          HOST_UID: "1001"
+          HOST_GID: "1001"
+        run: make ci
+
+      - name: Upload e2e report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: e2e/artifacts/
+          if-no-files-found: ignore

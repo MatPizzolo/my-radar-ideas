@@ -1,0 +1,36 @@
+# Secretos: nunca entran al repo
+.env
+.env.*
+!.env.example
+
+# Config local de Claude Code y worktrees de agentes
+.claude/settings.local.json
+.claude/worktrees/
+
+# Marcador de check verde y lock del estado (make ci, scripts/estado.py)
+.playbook/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+.next/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Datos generados y artefactos de pruebas
+data/generated/
+e2e/artifacts/
+e2e/node_modules/
+
+# macOS
+.DS_Store
