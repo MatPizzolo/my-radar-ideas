@@ -1,6 +1,6 @@
 # my-radar-ideas
 
-Radar diario que le deja al owner un PR con 5 a 10 señales de negocio y 1 idea B2B testeada a fondo; con su merge arranca la investigación de esa idea en el repo incubadora..
+Radar diario que le deja al owner un PR con 5 a 10 señales de negocio y 1 idea B2B testeada a fondo; con su merge arranca un repo propio para esa idea, generado con my-playbook (ADR 0002)..
 
 Generado con el playbook (`github:MatPizzolo/my-playbook`), tipo **herramienta-interna**. Cómo se trabaja: `CLAUDE.md` y `docs/WORKFLOW.md`. Alcance: `docs/PROJECT_BRIEF.md`. Dónde estamos: `docs/etapas/ESTADO.md`.
 
