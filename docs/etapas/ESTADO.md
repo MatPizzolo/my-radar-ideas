@@ -49,6 +49,12 @@
 
 - [ ] Completar los `[TODO]` de `docs/PROJECT_BRIEF.md` antes de `/etapa M0`.
 - [ ] Revisar `docs/cumplimiento.md` antes de la primera publicación.
+- [ ] **Preparar P3b antes de M0** (ADR 0003; lo hace el owner en la web):
+  - [ ] Crear la GitHub App `radar-bot` en github.com/settings/apps/new, sin webhook. Permisos: Administration, Contents y Pull requests en escritura; Metadata en lectura.
+  - [ ] Instalarla en la cuenta con "All repositories". Ojo: con Administration en escritura también puede borrar repos, así que la clave va solo como secreto de Actions.
+  - [ ] En `my-radar-ideas`, cargar la variable `RADAR_APP_ID` y el secreto `RADAR_APP_PRIVATE_KEY`.
+  - [ ] Correr `claude setup-token` en local y cargar el resultado como secreto `CLAUDE_CODE_OAUTH_TOKEN` (dura un año: renovarlo antes de que venza).
+  - Después: primera card de M0, el workflow `radar-probe` (`workflow_dispatch`), revisado con `agentic-actions-auditor` antes de correrlo.
 
 ## Historial
 
