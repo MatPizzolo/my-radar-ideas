@@ -20,10 +20,10 @@
 - [x] Fuentes de LatAm, India e Israel (radar-ideas.md:104) [sin verificar] → Geektime se cae (validacion.md #6)
 - [x] API de HN y Algolia (radar-ideas.md:108) [sin verificar]
 - [x] Términos de Bumeran, ZonaJobs y Computrabajo (radar-ideas.md:125) [sin verificar] → prohíben bots: solo fragmentos de búsqueda (validacion.md #8)
-- [ ] Que firecrawl y perplexity por OAuth anden dentro de una rutina (no está en el brief) → pendiente de prueba P1/P2 (validacion.md)
-- [ ] Que la rutina arranque pueda clonar gh:MatPizzolo/my-playbook (privado) para el copier copy → pendiente de prueba P1/P2 (validacion.md)
-- [ ] Que uvx exista en el entorno de la nube → pendiente de prueba P1/P2 (validacion.md)
-- [ ] Que la nube cargue .claude/skills/ de una subcarpeta (incubadora/proyectos/<slug>/) → pendiente de prueba P1/P2 (validacion.md)
+- [x] Que firecrawl y perplexity por OAuth anden dentro de una rutina (no está en el brief) → desde .mcp.json no conectan; como conectores de claude.ai sí (ADR 0004)
+- [x] Que la rutina arranque pueda clonar gh:MatPizzolo/my-playbook (privado) para el copier copy → refutado en P1; el arranque pasa a GitHub Actions (ADR 0003)
+- [x] Que uvx exista en el entorno de la nube → confirmado en P1 (uvx 0.11.32)
+- [x] Que la nube cargue .claude/skills/ de una subcarpeta (incubadora/proyectos/<slug>/) → ya no aplica (ADR 0002 y 0003)
 - [x] Si /schedule acepta la hora de Buenos Aires (07:41) o hay que pasarla a UTC
 
 ## Decisiones
@@ -41,7 +41,8 @@
 **Diferidas**
 
 - [ ] Dónde se hostea el pipeline (M5).
-- [ ] Dónde corre el arranque: en la nube creando el repo de la idea, o en local con /my-flow:nuevo-proyecto. Se decide con P1 (ADR 0002).
+- [ ] Arranque por GitHub Actions (ADR 0003): falta la prueba P3b.
+- [ ] Lectura en la nube (ADR 0004): falta la prueba P3a.
 - [ ] GitHub Pro para proteger repos privados; mientras tanto, my-radar-ideas y los repos de ideas van públicos.
 
 ## Backlog

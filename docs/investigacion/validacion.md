@@ -71,3 +71,120 @@ Las dos son tareas "Run now", sin schedule ni triggers y con todos los conectore
 | Protección de `main` "no permite saltearla" (radar-ideas.md:275) | **Se refuerza.** Tiene que estar sin bypass para admins; el proxy no lo impide. |
 | Acuerdo ADR 0001: firecrawl y perplexity en las rutinas | **Queda abierto** hasta P2. |
 | Acuerdo ADR 0001: la skill investigar viaja con cada proyecto | **Reemplazado por el ADR 0002.** Viaja solo si el arranque corre en la nube; ya no hay subcarpeta. |
+
+## Resultados de P1 y P2 (2026-11-18)
+
+Las dos se corrieron como sesiones comunes de Claude Code en la web (la misma VM y el mismo proxy que una rutina), con solo `my-radar-ideas` conectado y la red en "Limited". P1 corrió sin conectores y P2 con los conectores de claude.ai.
+
+### P1. Entorno
+
+| Paso | Resultado | Salida textual | Cierra |
+|---|---|---|---|
+| 1 `uv` / `uvx` | **Funcionó** | `uv 0.11.32`, `uvx 0.11.32` | #11 confirmado |
+| 2 `git ls-remote` de `my-playbook` (privado, no conectado) | **Falló** | `fatal: could not read Username for 'https://github.com': terminal prompts disabled` | #10 refutado con un solo repo |
+| 3a `gh api …/pulls` (REST) | **Funcionó** | `1` | #14 confirmado |
+| 3b `gh pr list` | **Falló** | `HTTP 403: GitHub GraphQL is not available from Claude Code sessions` | #14 confirmado |
+| 4a `curl` del RSS de BetaKit | **Falló** | `HTTP/1.1 403 Forbidden` | #17 confirmado: la red "Limited" no deja salir |
+| 4b WebFetch del mismo feed | **Falló** | `getaddrinfo ENOTFOUND betakit.com` | #17: WebFetch también pasa por la red de la VM |
+| 5a crear un repo (`POST user/repos`) | **Falló** | `This GitHub API path is not available: sessions are bound to their configured repositories` (403) | ADR 0002: la rutina no puede crear repos |
+| 5b `git init` y commit local | Funcionó | commit `33ebda9` en `/tmp/pa` | — |
+| 5c push al repo nuevo | **Falló** | `access denied by the git proxy: MatPizzolo/prueba-arranque is not in this session's authorized repository set` (403) | ADR 0002: tampoco puede pushear a un repo que no esté conectado |
+| Extra: `.mcp.json` al arrancar | **Falló** | firecrawl y perplexity: `ERR_PROXY_TUNNEL: Proxy refused to open a tunnel: 403 Forbidden` | #9: los servidores de `.mcp.json` no salen con la red "Limited" |
+
+### P2. Conectores de claude.ai
+
+| Conector | Disponible | Funcionó | Nota | Cierra |
+|---|---|---|---|---|
+| Firecrawl | Sí | **Sí**: scrape de seedcamp.com/our-companies con 200 y unos 52.700 caracteres | Sin pedido de login. Pasa por fuera de la lista de dominios permitidos. | #9 confirmado para Firecrawl como conector |
+| Perplexity_Computer | Sí | **No** | Es otro producto: tiene 4 herramientas para importar dashboards y ninguna de búsqueda. | #9 refutado para Perplexity con este conector |
+| Google Drive/Docs/Sheets, Notion, Canva, Figma, Claude_Docs, claude-code-remote | Sí | No probados | **Entran por defecto y con escritura** (#9). Hay que sacarlos de cada rutina. | — |
+
+### Qué queda abierto
+
+Todavía no se busca acá la vuelta a cada falla. Para cada una se investiga una alternativa que funcione:
+- arranque: crear el repo, clonar el playbook y pushear;
+- red: feeds, WebFetch y `.mcp.json`;
+- búsqueda: Perplexity.
+
+### P2b. Prompt para los conectores que no se probaron (no corrida)
+
+Es una sesión común en claude.ai/code con solo `my-radar-ideas`, la red en "Limited" y **todos** los conectores de claude.ai. Responde dos preguntas: qué conectores sirven para el radar y qué escritura habría que sacarle a cada rutina.
+
+```txt
+Prueba de conectores, SOLO LECTURA. Prohibido crear, editar, borrar, comentar, compartir, mover o publicar nada en ningún conector, y prohibido escribir en el repo. Si una prueba necesita escribir, no la hagas y anotalo.
+
+Para CADA conector MCP que tengas (Firecrawl, Perplexity_Computer, Google Drive, Google Docs, Google Sheets, Notion, Canva, Figma, Claude_Docs, claude-code-remote y cualquier otro):
+a) Listá sus herramientas y marcá cuáles escriben (crean, editan, borran, envían o comparten).
+b) Hacé UNA llamada de solo lectura, la más chica posible:
+   - Google Drive: buscá archivos con el texto "radar", máximo 1 resultado.
+   - Google Docs / Sheets: si la búsqueda de Drive devolvió un archivo de ese tipo, leé solo su título; si no, anotá "sin archivo para probar".
+   - Notion: buscá "radar", máximo 1 resultado.
+   - Canva: buscá diseños con "radar", máximo 1 resultado.
+   - Figma: whoami.
+   - Claude_Docs: la consulta o el listado de solo lectura más chico que tenga.
+   - claude-code-remote: listá los entornos y las tareas programadas, solo lectura.
+   - Perplexity_Computer: si tiene alguna herramienta de búsqueda, buscá "Launch YC Fall 2026"; si no, anotalo.
+c) Si aparece un pedido de login o de autorización, anotalo y no lo aceptes.
+
+Además, para el radar:
+1. WebSearch (la herramienta integrada): buscá "site:ycombinator.com/launches Fall 2026" y reportá si devolvió resultados.
+2. Firecrawl search: buscá "fintech startup Argentina seed round 2026", máximo 3 resultados.
+3. Firecrawl scrape de un feed RSS: https://betakit.com/feed/ ; decí si trajo XML con ítems.
+4. WebFetch de https://hacker-news.firebaseio.com/v0/topstories.json ; decí si trajo datos.
+
+Al final, dos tablas:
+- Conector · herramientas de escritura (lista) · llamada de lectura · funcionó sí/no · error textual.
+- Prueba del radar (1 a 4) · funcionó sí/no · error textual.
+
+### Resultados de P2b (2026-11-18)
+
+Ningún conector escribió nada y ninguno pidió login.
+
+| Prueba | Resultado | Nota |
+|---|---|---|
+| WebSearch `site:ycombinator.com/launches Fall 2026` | **Parcial** | Respondió, pero no respetó `site:` y casi todo vino de terceros (Extruct, Crustdata). Sirve para descubrir; no reemplaza a la fuente oficial. |
+| Firecrawl search (3 resultados) | **Funcionó** | Ejemplo: UIN (fintech argentina) levantó USD 2M de seed, LatamList, 2026-10-02. Cuesta 2 créditos. |
+| Firecrawl scrape de `betakit.com/feed/` | **Funcionó** | Trajo XML RSS 2.0 con 150 ítems, **de la caché de Firecrawl**, no en vivo. |
+| WebFetch de la API de HN | **Falló** | `getaddrinfo ENOTFOUND hacker-news.firebaseio.com` (dominio no permitido). |
+| Perplexity_Computer | **No sirve** | No tiene búsqueda. |
+| Drive, Notion, Canva, Figma, Claude_Docs | Leen bien | **Todos tienen herramientas de escritura.** Ninguno lo usa el radar: hay que sacarlos de cada rutina. |
+| claude-code-remote | Lee bien | Hay 3 entornos (`radar`, `dilo-studio`, `Default`) y ninguna tarea. **Tiene `add_repo`, `create_session`, `fire_trigger` y `update_environment`**: es candidato para el arranque (ver la propuesta). |
+
+## Alternativas para lo que falló (investigado el 2026-11-18)
+
+[V] = está en la documentación oficial · [I] = inferido, sin probar.
+
+### Arranque: crear el repo de la idea, generar con Copier, investigar y abrir el PR
+
+Ninguna vía de la nube de Claude puede crear un repo ni conectar a una corrida un repo elegido en el momento:
+- `/fire` acepta solo `text` [V];
+- la lista de repos de una rutina se cambia solo a mano [V];
+- `claude --cloud` no sirve desde un CI efímero, porque su token dura 30 días [V];
+- el proxy rechaza `POST user/repos` [P1].
+
+| # | Alternativa | Cómo funciona | Costo y riesgo | Estado |
+|---|---|---|---|---|
+| A | **GitHub Actions hace todo** | Un workflow en `my-radar-ideas` se dispara con `pull_request: closed` + merged + etiqueta `radar`. Pasos: un token de una GitHub App propia ("radar-bot") crea el repo público con solo un README en `main` [V: `POST /user/repos` con permiso Administration o Repository creation] → checkout de `my-playbook` y `copier copy` local → `anthropics/claude-code-action` con `CLAUDE_CODE_OAUTH_TOKEN` (tu suscripción, generado con `claude setup-token`) [V] investiga en una rama → un `gh pr create` fijo abre el PR. | Gratis en un repo público [V]. Dos secretos de Actions, no escritos en archivos: la clave de la App y el token OAuth, que dura un año. Que la action trabaje sobre otro repo distinto del suyo está **sin documentar [I]**. | Necesita la prueba P3b |
+| B | Actions crea el repo y genera, y **un link de un toque** arranca la investigación | Igual que A hasta Copier. Después el workflow comenta en el PR un link `claude.ai/code?repositories=MatPizzolo/<slug>&prompt=…` [V: los parámetros prellenan la sesión], y la investigación arranca cuando tocás el link desde el celular. | Un solo secreto (la App) y nada de Claude en CI. Cuesta un toque. | Variante de A, también va con P3b |
+| C | La rutina investiga y Actions solo mueve archivos | La rutina, disparada por el merge, investiga dentro de `my-radar-ideas` y abre un PR. Cuando lo mergeás, Actions crea el repo, genera con Copier y copia la investigación. | Ningún token de Claude en CI. Suma una revisión más, y la investigación no corre dentro del proyecto generado. | Posible, más incómoda |
+| D | Projects (beta): un hilo se agrega el repo nuevo a sí mismo [V] | — | Está en beta y no se sabe si una tarea de proyecto se puede disparar sola. Además, los hilos no cargan las skills del repo. | Descartada por ahora |
+| E | Conector oficial de GitHub (MCP) en la rutina | Tiene `create_repository`, `push_files` y `create_pull_request` [V]. | Es un conector **con escritura sin supervisión** y con alcance sobre todos tus repos (choca con las decisiones 0005 y 0006). Hay bugs abiertos. | Descartada |
+
+### Red: feeds, WebFetch y `.mcp.json`
+
+- **Por qué falló [V]:** "a `403` or a DNS error such as `ENOTFOUND` can mean that the requested host isn't on the cloud environment's allowlist" (https://code.claude.com/docs/en/errors). WebFetch sale desde la VM y pasa por la misma lista.
+- **Arreglo [V]:** en el entorno `radar`, que ya existe, se deja la red en "Limited" y se cargan los dominios en **Allowed domains**, uno por línea; `*.` cubre los subdominios. Los cambios se aplican en alrededor de un minuto (https://code.claude.com/docs/en/cloud-environments). "Full" no conviene: si un feed trae una inyección de prompt, podría mandar datos a cualquier host.
+- **Lista inicial:** betakit.com, techcrunch.com, sifted.eu, eu-startups.com, tech.eu, technode.com, pandaily.com, contxto.com, latamlist.com, inc42.com, yourstory.com, joinef.com, seedcamp.com, ycombinator.com, `*.ycombinator.com`, hacker-news.firebaseio.com y hn.algolia.com. Hay que cargar cada dominio solo y con `www.`, porque no está documentado si `*.` incluye el dominio pelado.
+- **`.mcp.json` en la nube [I]:** el OAuth no funciona sin nadie mirando. En la nube conviene usar los conectores de claude.ai, que no pasan por la lista. `.mcp.json` queda para uso local.
+
+### Búsqueda: Perplexity
+
+- **"Perplexity_Computer" no es el buscador [V]:** es el agente Computer de Perplexity. El buscador es otro servidor, `https://api.perplexity.ai/mcp` (`perplexity_search`), y se paga: USD 5 cada 1.000 búsquedas, o USD 1 con Fast Search, sin plan gratis (https://docs.perplexity.ai/getting-started/pricing).
+- **WebSearch integrada [V]** "runs a query against Anthropic's web search backend". No pasa por la red de la VM y entra en el uso del plan. En P2b sirvió para descubrir, pero no respetó `site:`.
+- **Firecrawl como conector [P2b]:** la búsqueda y el scrape funcionan. El plan gratis trae 1.000 créditos por mes [V]; la búsqueda cuesta 2 créditos y el scrape 1 por página.
+- **Exa [V]:** USD 10 de crédito gratis por mes, sin tarjeta; unos USD 4 a 7 por mes para 30 búsquedas diarias. **Tavily [V]:** 1.000 créditos gratis por mes, sin tarjeta.
+
+### Pruebas que faltan
+
+- **P3a. Red:** en el entorno `radar` con la lista cargada, correr `curl -sI <feed> | grep -i x-deny-reason` para cada feed y un WebFetch a la API de HN.
+- **P3b. Arranque A/B:** un workflow `workflow_dispatch` que: crea el token de la App → `POST user/repos` (`radar-probe`) → `copier copy` desde el checkout de `my-playbook` → `claude-code-action` con un prompt mínimo ("escribí HELLO.md") en el repo nuevo → `gh pr create`. Después se borra `radar-probe`.

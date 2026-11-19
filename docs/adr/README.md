@@ -7,6 +7,8 @@ Los ADR los escribe el orquestador al cerrar cada etapa (`/cerrar-etapa`) o con 
 | # | Título | Estado |
 |---|---|---|
 | [0001](0001-kit-de-arranque.md) | Kit de arranque: el playbook | Aceptada (acuerdos 1 y 5 reemplazados por 0002) |
-| [0002](0002-un-repo-por-idea.md) | Un repo por idea aprobada, sin incubadora | Aceptada |
+| [0002](0002-un-repo-por-idea.md) | Un repo por idea aprobada, sin incubadora | Aceptada (cómo corre el arranque: reemplazado por 0003) |
+| [0003](0003-arranque-por-github-actions.md) | El arranque corre en GitHub Actions | Aceptada |
+| [0004](0004-lectura-de-fuentes-en-la-nube.md) | Cómo lee y busca el radar en la nube | Aceptada |
 
 Los ADR del proyecto arrancan en 0002 y no los pisa `copier update`.
