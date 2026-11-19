@@ -49,6 +49,19 @@
 
 - [ ] Completar los `[TODO]` de `docs/PROJECT_BRIEF.md` antes de `/etapa M0`.
 - [ ] Revisar `docs/cumplimiento.md` antes de la primera publicación.
+- [ ] **P3a, prueba de red antes de M0** (ADR 0004; la hace el owner en la web):
+  - [ ] En claude.ai/code, editar el entorno `radar`: red en "Limited", destildar "Allow package managers" y cargar en Allowed domains, uno por línea: betakit.com, www.betakit.com, techcrunch.com, sifted.eu, eu-startups.com, www.eu-startups.com, tech.eu, technode.com, pandaily.com, contxto.com, latamlist.com, inc42.com, yourstory.com, www.joinef.com, seedcamp.com, www.ycombinator.com, hacker-news.firebaseio.com, hn.algolia.com.
+  - [ ] Abrir una sesión en ese entorno y correr el prompt de P3a (abajo). Pasar la tabla para cerrar el ADR 0004.
+  - [ ] Si una URL da 403 sin `x-deny-reason`, la bloquea el propio sitio: esa fuente pasa a leerse con Firecrawl. Si aparece `x-deny-reason`, falta sumar ese dominio (por ejemplo, el de un CDN o una redirección).
+- [ ] **Conector de Perplexity para búsqueda** (ADR 0004): en claude.ai/customize/connectors, "Add custom connector" con `https://api.perplexity.ai/mcp`. Se entra con OAuth eligiendo una organización de la API de Perplexity. Saldo prepago y recarga automática apagada: ese es el tope de costo.
+
+  Prompt de P3a:
+  ```txt
+  Prueba de red, solo lectura. Para cada URL corré `curl -s -o /dev/null -w "%{http_code}" -D - URL | grep -iE "^HTTP|x-deny-reason"` y reportá el código y si aparece x-deny-reason:
+  https://betakit.com/feed/ https://techcrunch.com/feed/ https://sifted.eu/feed https://www.eu-startups.com/feed/ https://tech.eu/feed/ https://technode.com/feed/ https://pandaily.com/feed/ https://contxto.com/es/feed/ https://latamlist.com/feed/ https://inc42.com/feed/ https://yourstory.com/feed https://www.joinef.com/feed/ https://seedcamp.com/feed/ https://www.ycombinator.com/blog/feed https://hacker-news.firebaseio.com/v0/topstories.json https://hn.algolia.com/api/v1/search_by_date?tags=show_hn
+  Además, un WebFetch de https://hacker-news.firebaseio.com/v0/topstories.json.
+  Al final, una tabla: URL · código · x-deny-reason sí/no.
+  ```
 - [ ] **Preparar P3b antes de M0** (ADR 0003; lo hace el owner en la web):
   - [ ] Crear la GitHub App `radar-bot` en github.com/settings/apps/new, sin webhook. Permisos: Administration, Contents y Pull requests en escritura; Metadata en lectura.
   - [ ] Instalarla en la cuenta con "All repositories". Ojo: con Administration en escritura también puede borrar repos, así que la clave va solo como secreto de Actions.
